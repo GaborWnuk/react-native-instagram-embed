@@ -1,7 +1,7 @@
 {
   "name": "react-native-instagram-embed",
-  "version": "0.3.8",
-  "keywords": ["react", "image", "preview", "native", "placeholder"],
+  "version": "0.0.1",
+  "keywords": ["react", "instagram", "embed"],
   "homepage": "https://github.com/GaborWnuk/react-native-instagram-embed",
   "repository": {
     "type": "git",
@@ -12,9 +12,7 @@
     "test": "jest --coverage --forceExit",
     "flow": "./node_modules/.bin/flow; test $? -eq 0 -o $? -eq 2"
   },
-  "dependencies": {
-    "base-64": "^0.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-jest": "^19.0.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
