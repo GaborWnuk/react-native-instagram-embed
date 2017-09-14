@@ -50,10 +50,10 @@ export default class InstagramEmbed extends PureComponent {
         let avatarRegex = /class\=\"ehAvatar\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\">/g;
         let avatarMatch = avatarRegex.exec(responseText);
 
-        let likesRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9]+)<span\s+class\=\"espMetricTextCollapsible\">\s+like/g;
+        let likesRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.k]+)<span\s+class\=\"espMetricTextCollapsible\">\s+like/g;
         let likesMatch = likesRegex.exec(responseText);
 
-        let commentsRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9]+)<span\s+class\=\"espMetricTextCollapsible\">\s+comment/g;
+        let commentsRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.k]+)<span\s+class\=\"espMetricTextCollapsible\">\s+comment/g;
         let commentsMatch = commentsRegex.exec(responseText);
 
         this.setState({
@@ -83,7 +83,7 @@ export default class InstagramEmbed extends PureComponent {
     const { response, height, width, avatar, likes, comments } = this.state;
 
     if (!response) {
-      return <View style={[{ width: 0, height: 0 }, style]} />;
+      return <View style={[{ width: '100%', height: 0 }, style]} />;
     }
 
     return (

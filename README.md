@@ -4,12 +4,17 @@
 Instagram Embed for React Native
 
 ## What is it for?
+Simple as that - we needed Instagram embeds in our application, and couldn't find anything decent on the internet.
+
+Feel free to contribute.
 
 ## How does it work?
 
-## Installation
+Use it to display standard Instagram embed "natively" (without WebView).
 
-### Dependencies
+![Screenshot](https://travis-ci.org/GaborWnuk/react-native-instagram-embed.svg?branch=master)
+
+## Installation
 
 ### Installation
 
@@ -23,6 +28,12 @@ or
 
 ```
 yarn add react-native-instagram-embed
+```
+
+Example:
+
+```
+<InstagramEmbed url="https://www.instagram.com/p/BYyvO2WA3Ra/" style={{ width: "100%" }} />
 ```
 
 ## License
