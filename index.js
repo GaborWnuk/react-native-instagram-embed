@@ -22,7 +22,10 @@ export default class InstagramEmbed extends PureComponent {
   }
 
   _onLayout = layout => {
-    this.setState({ height: layout.nativeEvent.layout.height });
+    this.setState({
+      height: layout.nativeEvent.layout.height,
+      width: layout.nativeEvent.layout.width,
+    });
   };
 
   /*
@@ -87,7 +90,6 @@ export default class InstagramEmbed extends PureComponent {
           styles.container,
           style,
           {
-            width: width,
             height: height,
           },
         ]}
@@ -106,7 +108,10 @@ export default class InstagramEmbed extends PureComponent {
           </View>
           <Image
             source={{ uri: response.thumbnail_url }}
-            style={{ height: width - 2 }}
+            style={{
+              height:
+                response.thumbnail_height * width / response.thumbnail_width,
+            }}
           />
           <View style={{ flexDirection: 'row', margin: 8 }}>
             <Text>{response.title}</Text>
