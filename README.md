@@ -12,7 +12,7 @@ Feel free to contribute.
 
 Use it to display standard Instagram embed "natively" (without WebView).
 
-![Screenshot](https://travis-ci.org/GaborWnuk/react-native-instagram-embed.svg?branch=master)
+![Screenshot](https://github.com/GaborWnuk/react-native-instagram-embed/raw/master/screenshots/screenshot001.png)
 
 ## Installation
 
