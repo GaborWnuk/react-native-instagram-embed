@@ -24,4 +24,11 @@ export default StyleSheet.create({
   },
   author: { marginLeft: 8, fontWeight: '500' },
   titleContainer: { flexDirection: 'row', margin: 8 },
+  statsContainer: {
+    flexDirection: 'row',
+    marginVertical: 6,
+    alignItems: 'center',
+  },
+  statIcon: { width: 16, height: 14 },
+  statLabel: { fontWeight: '500', marginHorizontal: 8 },
 });

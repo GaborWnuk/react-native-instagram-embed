@@ -18,6 +18,8 @@ export default class InstagramEmbed extends PureComponent {
       height: 240,
       width: 320,
       avatar: null,
+      likes: 0,
+      comments: 0,
     };
   }
 
@@ -78,7 +80,7 @@ export default class InstagramEmbed extends PureComponent {
 
   render(): JSX.JSXElement {
     const { style } = this.props;
-    const { response, height, width, avatar } = this.state;
+    const { response, height, width, avatar, likes, comments } = this.state;
 
     if (!response) {
       return <View style={[{ width: 0, height: 0 }, style]} />;
@@ -113,7 +115,19 @@ export default class InstagramEmbed extends PureComponent {
                 response.thumbnail_height * width / response.thumbnail_width,
             }}
           />
-          <View style={{ flexDirection: 'row', margin: 8 }}>
+          <View style={{ flexDirection: 'column', margin: 8 }}>
+            <View style={styles.statsContainer}>
+              <Image
+                source={require('./assets/images/icon_likes.png')}
+                style={styles.statIcon}
+              />
+              <Text style={styles.statLabel}>{likes} likes</Text>
+              <Image
+                source={require('./assets/images/icon_comments.png')}
+                style={styles.statIcon}
+              />
+              <Text style={styles.statLabel}>{comments} comments</Text>
+            </View>
             <Text>{response.title}</Text>
           </View>
         </View>
