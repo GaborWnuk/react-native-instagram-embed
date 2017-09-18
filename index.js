@@ -20,6 +20,7 @@ export default class InstagramEmbed extends PureComponent {
       avatar: null,
       likes: 0,
       comments: 0,
+      thumbnail: null,
     };
   }
 
@@ -48,7 +49,7 @@ export default class InstagramEmbed extends PureComponent {
     fetch(`https://www.instagram.com/p/${id}/embed/captioned/`)
       .then(response => response.text())
       .then(responseText => {
-        let avatarRegex = /class\=\"ehAvatar\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\">/g;
+        let avatarRegex = /class\=\"ehAvatar\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\"/g;
         let avatarMatch = avatarRegex.exec(responseText);
 
         let likesRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+like/g;
@@ -57,7 +58,13 @@ export default class InstagramEmbed extends PureComponent {
         let commentsRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+comment/g;
         let commentsMatch = commentsRegex.exec(responseText);
 
+        let thumbnailRegex = /class\=\"efImage\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\"/g;
+        let thumbnailMatch = thumbnailRegex.exec(responseText);
+
+        console.log(thumbnailMatch);
+
         this.setState({
+          thumbnail: thumbnailMatch[1],
           avatar: avatarMatch[1],
           likes: likesMatch[1],
           comments: commentsMatch[1],
@@ -81,7 +88,15 @@ export default class InstagramEmbed extends PureComponent {
 
   render(): JSX.JSXElement {
     const { style } = this.props;
-    const { response, height, width, avatar, likes, comments } = this.state;
+    const {
+      response,
+      height,
+      width,
+      avatar,
+      likes,
+      comments,
+      thumbnail,
+    } = this.state;
 
     if (!response) {
       return <View style={[{ width: 0, height: 0 }, style]} />;
@@ -109,13 +124,15 @@ export default class InstagramEmbed extends PureComponent {
             )}
             <Text style={styles.author}>{response.author_name}</Text>
           </View>
-          <Image
-            source={{ uri: response.thumbnail_url }}
-            style={{
-              height:
-                response.thumbnail_height * width / response.thumbnail_width,
-            }}
-          />
+          {!!thumbnail && (
+            <Image
+              source={{ uri: thumbnail }}
+              style={{
+                height:
+                  response.thumbnail_height * width / response.thumbnail_width,
+              }}
+            />
+          )}
           <View style={{ flexDirection: 'column', margin: 8 }}>
             <View style={styles.statsContainer}>
               <Image
