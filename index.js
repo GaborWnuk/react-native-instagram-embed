@@ -19,6 +19,7 @@ export default class InstagramEmbed extends PureComponent {
       width: 320,
       avatar: null,
       likes: 0,
+      views: 0,
       comments: 0,
       thumbnail: null,
     };
@@ -45,29 +46,30 @@ export default class InstagramEmbed extends PureComponent {
       return;
     }
 
-    console.log(`https://www.instagram.com/p/${id}/embed/captioned/`);
     fetch(`https://www.instagram.com/p/${id}/embed/captioned/`)
       .then(response => response.text())
       .then(responseText => {
         let avatarRegex = /class\=\"ehAvatar\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\"/g;
         let avatarMatch = avatarRegex.exec(responseText);
 
-        let likesRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+like/g;
+        let likesRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+likes?/g;
         let likesMatch = likesRegex.exec(responseText);
 
-        let commentsRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+comment/g;
+        let viewsRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+views?/g;
+        let viewsMatch = viewsRegex.exec(responseText);
+
+        let commentsRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+comments?/g;
         let commentsMatch = commentsRegex.exec(responseText);
 
         let thumbnailRegex = /class\=\"efImage\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\"/g;
         let thumbnailMatch = thumbnailRegex.exec(responseText);
 
-        console.log(thumbnailMatch);
-
         this.setState({
-          thumbnail: thumbnailMatch[1],
-          avatar: avatarMatch[1],
-          likes: likesMatch[1],
-          comments: commentsMatch[1],
+          thumbnail: thumbnailMatch ? thumbnailMatch[1] : null,
+          avatar: avatarMatch ? avatarMatch[1] : null,
+          likes: likesMatch ? likesMatch[1] : null,
+          views: viewsMatch ? viewsMatch[1] : null,
+          comments: commentsMatch ? commentsMatch[1] : null,
         });
       })
       .catch(error => {});
@@ -96,6 +98,7 @@ export default class InstagramEmbed extends PureComponent {
       likes,
       comments,
       thumbnail,
+      views,
     } = this.state;
 
     if (!response) {
@@ -135,16 +138,33 @@ export default class InstagramEmbed extends PureComponent {
           )}
           <View style={{ flexDirection: 'column', margin: 8 }}>
             <View style={styles.statsContainer}>
-              <Image
-                source={require('./assets/images/icon_likes.png')}
-                style={styles.statIcon}
-              />
-              <Text style={styles.statLabel}>{likes} likes</Text>
-              <Image
-                source={require('./assets/images/icon_comments.png')}
-                style={styles.statIcon}
-              />
-              <Text style={styles.statLabel}>{comments} comments</Text>
+              {!!views && (
+                <View style={{ flexDirection: 'row' }}>
+                  <Image
+                    source={require('./assets/images/icon_views.png')}
+                    style={styles.statIcon}
+                  />
+                  <Text style={styles.statLabel}>{views} views</Text>
+                </View>
+              )}
+              {!!likes && (
+                <View style={{ flexDirection: 'row' }}>
+                  <Image
+                    source={require('./assets/images/icon_likes.png')}
+                    style={styles.statIcon}
+                  />
+                  <Text style={styles.statLabel}>{likes} likes</Text>
+                </View>
+              )}
+              {!!comments && (
+                <View style={{ flexDirection: 'row' }}>
+                  <Image
+                    source={require('./assets/images/icon_comments.png')}
+                    style={styles.statIcon}
+                  />
+                  <Text style={styles.statLabel}>{comments} comments</Text>
+                </View>
+              )}
             </View>
             <Text>{response.title}</Text>
           </View>
