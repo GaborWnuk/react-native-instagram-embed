@@ -1,13 +1,5 @@
-/**
- * Instagram Embed component for React Native
- * https://github.com/GaborWnuk
- * @flow
- */
-
 import React, { PureComponent } from 'react';
-import { View, Image, Text } from 'react-native';
-
-import styles from './index-styles';
+import { View, Image, Text, StyleSheet } from 'react-native';
 
 export default class InstagramEmbed extends PureComponent {
   constructor(props) {
@@ -37,21 +29,21 @@ export default class InstagramEmbed extends PureComponent {
    * existing API (official) data with missing properties we need.
    */
   _fetchComplementaryData = url => {
-    let regex = /\/p\/([a-zA-Z0-9]+)/g;
-    let match = regex.exec(url);
+    let match = url.split('/');
+    match = match.filter(item => item !== "");
 
-    const id = match[1];
-
+    const id = match.slice(-1)[0];
+  
     if (!id) {
       return;
-    }
+    } 
 
     fetch(`https://www.instagram.com/p/${id}/embed/captioned/`)
       .then(response => response.text())
       .then(responseText => {
         let avatarRegex = /class\=\"ehAvatar\"\s+src=\"([a-zA-Z0-9\-\\\:\/\.\_]+)\"/g;
         let avatarMatch = avatarRegex.exec(responseText);
-
+        
         let likesRegex = /span\s+class\=\"espMetricTextCollapsible\"><\/span>([0-9\,\.km]+)<span\s+class\=\"espMetricTextCollapsible\">\s+likes?/g;
         let likesMatch = likesRegex.exec(responseText);
 
@@ -72,7 +64,7 @@ export default class InstagramEmbed extends PureComponent {
           comments: commentsMatch ? commentsMatch[1] : null,
         });
       })
-      .catch(error => {});
+      .catch(error => { });
   };
 
   componentDidMount = () => {
@@ -88,7 +80,7 @@ export default class InstagramEmbed extends PureComponent {
       });
   };
 
-  render(): JSX.JSXElement {
+  render() {
     const { style } = this.props;
     const {
       response,
@@ -97,13 +89,14 @@ export default class InstagramEmbed extends PureComponent {
       avatar,
       likes,
       comments,
-      thumbnail,
       views,
     } = this.state;
 
     if (!response) {
       return <View style={[{ width: 0, height: 0 }, style]} />;
     }
+
+    const { thumbnail_url, author_name, thumbnail_height, thumbnail_width } = response;
 
     return (
       <View
@@ -125,14 +118,14 @@ export default class InstagramEmbed extends PureComponent {
                 style={styles.avatar}
               />
             )}
-            <Text style={styles.author}>{response.author_name}</Text>
+            <Text style={styles.author}>{author_name}</Text>
           </View>
-          {!!thumbnail && (
+          {!!thumbnail_url && (
             <Image
-              source={{ uri: thumbnail }}
+              source={{ uri: thumbnail_url }}
               style={{
                 height:
-                  response.thumbnail_height * width / response.thumbnail_width,
+                  thumbnail_height * width / thumbnail_width,
               }}
             />
           )}
